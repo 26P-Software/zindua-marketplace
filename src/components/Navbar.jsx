@@ -1,39 +1,29 @@
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
-// Add these two imports:
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+// src/components/Navbar.jsx
+import React, { useContext } from 'react';
+import { CartContext } from '@/context/CartContext';
+import { ThemeContext } from '@/context/ThemeContext';
+import { Button } from '@/components/ui/button';
 
-const Navbar = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-  const cartItems = useSelector((state) => state.cart.items);
+export default function Navbar() {
+  // Pull values from both contexts smoothly
+  const { cart } = useContext(CartContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="text-[#fe3448] font-bold text-2xl tracking-tight">ZinduaMarket</Link>
-        
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8 text-[#757575] font-medium">
-          <Link to="/" className="hover:text-[#fe3448] transition-colors">Store</Link>
-          <Link to="/admin" className="hover:text-[#fe3448] transition-colors">Admin</Link>
-          <div className="h-4 w-px bg-gray-200"></div>
-          <Link to="/login" className="hover:text-[#fe3448]">Login</Link>
-          <Link to="/register" className="bg-[#fe3448] text-white px-5 py-2 rounded-full hover:bg-red-700 transition-all">Get Started</Link>
-          
-          <Link to="/cart" className="relative flex items-center gap-2 hover:text-[#fe3448] transition-all">
-            <FontAwesomeIcon icon={faShoppingCart} className="text-lg" />
-            {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-3 bg-[#fe3448] text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">
-                {cartItems.length}
-              </span>
-            )}
-          </Link>
-        </div>
-      </nav>
-    </header>
-  );
-};
+    <nav className="flex justify-between items-center p-4 border-b bg-background text-foreground">
+      <h1 className="text-xl font-bold">Zindua Market</h1>
+    
+      <div className="flex items-center gap-4">
+        {/* Theme Controller */}
+        <Button variant="ghost" onClick={toggleTheme}>
+          Current Mode: <span className="capitalize ml-1 font-bold">{theme}</span>
+        </Button>
 
-export default Navbar;
+        {/* Cart Counter */}
+        <div className="bg-primary text-primary-foreground px-3 py-1.5 rounded-md text-sm font-medium">
+          Cart: <strong>{cart.length}</strong> items
+        </div>
+      </div>
+    </nav>
+  );
+}
